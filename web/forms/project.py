@@ -4,10 +4,13 @@ from django.core.validators import RegexValidator
 
 from web import models
 from web.forms.bootstrap import BootstrapForm
+from web.forms.widgets import ColorRadioSelect
 
 
 class ProjectModelForm(BootstrapForm, forms.ModelForm):
     # desc = forms.CharField(widget=forms.Textarea(attrs={'xx': 123})) # apply Textarea style to CharField
+    bootstrap_class_exclude = ['color']  # no Bootstrap style for 'color'
+
     name = forms.CharField(label='Task name',
                            validators=[RegexValidator(r"^[-a-zA-Z0-9_]+\Z",
                                                       'Please use only "a-z", "A-Z", "-", "_" and "0-9".')]
@@ -20,6 +23,8 @@ class ProjectModelForm(BootstrapForm, forms.ModelForm):
         widgets = {
             'desc': forms.Textarea(attrs={'xx': 123}),
             'S3_secret_key': forms.PasswordInput,
+            # 'color': forms.RadioSelect,  # using RadioSelect widget for color selection
+            'color': ColorRadioSelect(attrs={'class': 'color-radio'}),  # customized RadioSelect widget
         }
 
     def __init__(self, request, *args, **kwargs):

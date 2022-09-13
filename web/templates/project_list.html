@@ -14,8 +14,6 @@
             flex-wrap: wrap;
         }
 
-        /* 用于让子面板横排显示 */
-
         .panel-body > .item {
             border-radius: 6px;
             width: 228px;
@@ -27,7 +25,6 @@
             border: 1px solid #f0ad4e;
         }
 
-        /* 鼠标悬停时产生变化 */
 
         .panel-body > .item > .title {
             height: 104px;
@@ -59,6 +56,29 @@
         .panel-body > .item > .info .fa-star {
             font-size: 18px;
         }
+
+        .color-radio label {
+            margin-left: 0;
+            padding-left: 0;
+        }
+
+        .color-radio input[type="radio"] {
+            opacity: 0;
+            display: none;
+        }
+
+        .color-radio input[type='radio'] + .cycle {
+            display: inline-block;
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+            border: 2px solid #dddddd;
+        }
+
+        .color-radio input[type='radio']:checked + .cycle {
+            border: 2px solid black;
+        }
+
     </style>
 
 {% endblock %}
