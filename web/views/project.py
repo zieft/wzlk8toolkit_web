@@ -15,7 +15,7 @@ def project_list(request):
         )
         for project in my_project_list:
             if project.star:
-                project_dict['star'].append(project)
+                project_dict['star'].append({'value': project, 'type': 'my'})
             else:
                 project_dict['my'].append(project)
 
@@ -24,7 +24,7 @@ def project_list(request):
         )
         for project_user in join_project_list:
             if project_user.star:
-                project_dict['star'].append(project_user.project)
+                project_dict['star'].append({'value': project_user.project, 'type': 'my'})
             else:
                 project_dict['join'].append(project_user.project)
 
@@ -55,6 +55,25 @@ def project_star(request, project_type, project_id):
             project_id=project_id,
             user=request.tracer.user,  # ensure the task that I participate
         ).update(star=True)
+        return redirect('project_list')
+
+    return HttpResponse("Bad request.")
+
+
+def project_unstar(request, project_type, project_id):
+    """ unstar a starred task """
+
+    if project_type == 'my':
+        models.Project.objects.filter(
+            id=project_id,
+            creator=request.tracer.user  # ensure the owner
+        ).update(star=False)
+        return redirect('project_list')
+    if project_type == 'join':
+        models.ProjectUser.objects.filter(
+            project_id=project_id,
+            user=request.tracer.user,  # ensure the task that I participate
+        ).update(star=False)
         return redirect('project_list')
 
     return HttpResponse("Bad request.")
