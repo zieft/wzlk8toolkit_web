@@ -7,5 +7,6 @@ urlpatterns = [
     path('register/', account.register, name='register'),
     path('send/sms', account.send_sms_fake, name='send_sms'),
     path('login/', account.login, name='login'),
-    path('image/code', account.image_code, name='image_code'),
+    path('logout/', account.logout, name='logout'),
+    path('image/code/', account.image_code, name='image_code'),
 ]

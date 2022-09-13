@@ -47,7 +47,7 @@ def login(request):
 
         user_object = models.UserInfo.objects.filter(username=username, password=password).first()
         if user_object:
-            # 用户存在，登录成功，跳转
+            # user exist, login successful
             request.session['user_id'] = user_object.id
             # request.session['user_name'] = user_object.username
             request.session.set_expiry(60 * 60 * 24)  # login session for 24 hours
@@ -68,3 +68,8 @@ def image_code(request):
     img.save(stream, 'png')
 
     return HttpResponse(stream.getvalue())
+
+
+def logout(request):
+    request.session.flush()
+    return redirect('login')
