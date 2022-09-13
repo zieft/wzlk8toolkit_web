@@ -32,7 +32,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button id="btnSubmit" type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
                     success: function (res) {
                         console.log(res);
                         if (res.status) {
-
+                            location.reload();
                         } else {
                             $.each(res.error, function (key, value) {
                                 $("#id_" + key).next().text(value[0]);

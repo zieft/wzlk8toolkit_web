@@ -2,17 +2,20 @@ import random
 
 from django import forms
 from django.conf import settings
-from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator, EmailValidator
+from django_redis import get_redis_connection
 
+from utils import encrypt
 from web import models
 from web.forms.bootstrap import BootstrapForm
-from utils import encrypt
-
-from django_redis import get_redis_connection
 
 
 class RegisterModelForm(BootstrapForm, forms.ModelForm):
+    email = forms.EmailField(label='Email',
+                             validators=[EmailValidator]
+                             )
+
     password = forms.CharField(label="Password",
                                widget=forms.PasswordInput(attrs={
                                    # 'class': 'form-control',
