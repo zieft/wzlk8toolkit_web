@@ -40,7 +40,7 @@
                     <div class="form-group">
                         <label for={{ field.id_for_label }}>{{ field.label }}</label>
                         {{ field }}
-                    <span class="error-msg"></span>
+                        <span class="error-msg"></span>
                     </div>
                 {% endif %}
             {% endfor %}
@@ -51,7 +51,50 @@
 
 {% block js %}
     <script>
+        $(function () {
+            bindClickBtnSms();
+        })
 
+        function bindClickBtnSms() {
+            $("#btnSms").click(function () {
+                $(".error-msg").empty();
+
+                var mobilePhone = ($('#id_mobile_phone').val());
+
+                $.ajax({
+                    url: '{% url 'send_sms' %}',
+                    type: 'GET',
+                    data: {mobile_phone: mobilePhone, tpl: 'register'},
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if (res.status) {
+                            console.log(res) // need to be removed if using real sms
+                            sendSmsRemind(); // 60 seconds cooldown
+                        } else {
+                            console.log(res);
+                            $.each(res.error, function (key, value) {
+                                $("#id_" + key).next().text(value[0]);
+                            })
+                        }
+                    }
+                })
+            })
+        }
+
+        function sendSmsRemind() {
+            var $smsBtn = $('#btnSms');
+            $smsBtn.prop('disabled', true);
+            var time = 60;
+            var remind = setInterval(function () {
+                $smsBtn.val(time + 's');
+
+                time = time - 1;
+                if (time < 1) {
+                    clearInterval(remind);
+                    $smsBtn.val('Get code').prop('disabled', false);
+                }
+            }, 1000)
+        }
     </script>
 
 {% endblock %}
