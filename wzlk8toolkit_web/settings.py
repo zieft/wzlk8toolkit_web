@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'web.apps.WebConfig',
+    # 'web.apps.WebConfig',
+    'web',
 ]
 
 MIDDLEWARE = [
@@ -121,6 +122,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+MOBILE_PHONE_VALIDATOR = r'^(1[3|4|5|6|7|8|9])(\d{8}|\d{9})$'
 
 try:
     from .local_settings import *
