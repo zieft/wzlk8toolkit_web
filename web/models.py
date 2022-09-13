@@ -33,7 +33,7 @@ class Project(models.Model):
         (7, '#20bfa3'),
     )
 
-    name = models.CharField(verbose_name='Project Name', max_length=32)
+    name = models.CharField(verbose_name='Task Name', max_length=32)
     color = models.SmallIntegerField(verbose_name='Color', choices=COLOR_CHOICES, default=1)
     desc = models.CharField(verbose_name='Description', max_length=255, null=True, blank=True)
     use_space = models.IntegerField(verbose_name='Space used', default=0)
@@ -54,6 +54,6 @@ class ProjectUser(models.Model):
     user = models.ForeignKey(verbose_name='User', to='UserInfo', related_name='projects', on_delete=models.CASCADE)
     invitor = models.ForeignKey(verbose_name='Invitor', to='UserInfo', related_name='invites', null=True, blank=True,
                                 on_delete=models.CASCADE)
-    project = models.ForeignKey(verbose_name='Project', to='Project', on_delete=models.CASCADE)
+    project = models.ForeignKey(verbose_name='Task', to='Project', on_delete=models.CASCADE)
     star = models.BooleanField(verbose_name='Star', default=False)
     create_datetime = models.DateTimeField(verbose_name='Joining Time', auto_now_add=True)

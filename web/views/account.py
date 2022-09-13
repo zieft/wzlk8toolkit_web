@@ -51,7 +51,7 @@ def login(request):
             request.session['user_id'] = user_object.id
             # request.session['user_name'] = user_object.username
             request.session.set_expiry(60 * 60 * 24)  # login session for 24 hours
-            return redirect('index')
+            return redirect('project_list')
         form.add_error('username', 'Username or Password invalid!')
 
     return render(request, 'login.html', {'form': form})
