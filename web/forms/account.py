@@ -131,3 +131,32 @@ class SendSmsFormFake(forms.Form):
         print('The verification code is：', code)
 
         return mobile_phone
+
+
+class LoginForm(BootstrapForm, forms.Form):
+    username = forms.CharField(label='Username')
+    password = forms.CharField(label='Password', widget=forms.PasswordInput(render_value=True))
+    code = forms.CharField(label='Code')
+
+    def __init__(self, request, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.request = request
+
+    def clean_password(self):
+        pwd = self.cleaned_data['password']
+
+        return encrypt.md5(pwd)
+
+    def clean_code(self):
+        # get user input
+        code = self.cleaned_data['code']
+
+        # get
+        code_from_session = self.request.session.get("image_code")
+        if not code_from_session:
+            raise ValidationError("Code is expired, please try again")
+
+        if code.upper().strip() != code_from_session.upper().strip():
+            raise ValidationError("Wrong code.")
+
+        return code

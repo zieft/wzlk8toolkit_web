@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from web.forms.account import RegisterModelForm, SendSmsFormFake
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
+
+from web import models
+from web.forms.account import RegisterModelForm, SendSmsFormFake, LoginForm
 
 from django_redis import get_redis_connection
 
@@ -31,3 +33,38 @@ def send_sms_fake(request):
         return JsonResponse({'status': True, 'code': code})  # 'code' should not be sent to the frontend
 
     return JsonResponse({'status': False, 'error': form.errors})
+
+
+def login(request):
+    """ Username - Password Login"""
+    if request.method == 'GET':
+        form = LoginForm(request)
+        return render(request, 'login.html', {'form': form})
+    form = LoginForm(request, data=request.POST)
+    if form.is_valid():
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+
+        user_object = models.UserInfo.objects.filter(username=username, password=password).first()
+        if user_object:
+            # 用户存在，登录成功，跳转
+            request.session['user_id'] = user_object.id
+            # request.session['user_name'] = user_object.username
+            request.session.set_expiry(60 * 60 * 24)  # login session for 24 hours
+            return redirect('index')
+        form.add_error('username', 'Username or Password invalid!')
+
+    return render(request, 'login.html', {'form': form})
+
+
+def image_code(request):
+    from utils.image_code import check_code
+    from io import BytesIO
+    img, code = check_code()
+    request.session['image_code'] = code
+    request.session.set_expiry(600)
+
+    stream = BytesIO()
+    img.save(stream, 'png')
+
+    return HttpResponse(stream.getvalue())

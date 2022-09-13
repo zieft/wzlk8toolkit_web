@@ -6,4 +6,6 @@ urlpatterns = [
     path('index/', home.index, name='index'),
     path('register/', account.register, name='register'),
     path('send/sms', account.send_sms_fake, name='send_sms'),
+    path('login/', account.login, name='login'),
+    path('image/code', account.image_code, name='image_code'),
 ]
