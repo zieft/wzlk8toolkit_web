@@ -1,12 +1,33 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 
+from web import models
 from web.forms.project import ProjectModelForm
 
 
 def project_list(request):
     """ project list """
     if request.method == 'GET':
+        project_dict = {'star': [], 'my': [], 'join': []}
+
+        my_project_list = models.Project.objects.filter(  # Project object
+            creator=request.tracer.user
+        )
+        for project in my_project_list:
+            if project.star:
+                project_dict['star'].append(project)
+            else:
+                project_dict['my'].append(project)
+
+        join_project_list = models.ProjectUser.objects.filter(  # ProjectUser object
+            user=request.tracer.user
+        )
+        for project_user in join_project_list:
+            if project_user.star:
+                project_dict['star'].append(project_user.project)
+            else:
+                project_dict['join'].append(project_user.project)
+
         form = ProjectModelForm(request)
         return render(request, 'project_list.html', {'form': form})
 
