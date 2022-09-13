@@ -1,5 +1,5 @@
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect
 
 from web import models
 from web.forms.project import ProjectModelForm
@@ -38,3 +38,23 @@ def project_list(request):
         form.save()  # write to the db
         return JsonResponse({'status': True})
     return JsonResponse({'status': False, 'error': form.errors})
+
+
+def project_star(request, project_type, project_id):
+    """ star a task """
+
+    if project_type == 'my':
+        models.Project.objects.filter(
+            id=project_id,
+            creator=request.tracer.user  # ensure the owner
+        ).update(star=True)
+        return redirect('project_list')
+
+    if project_type == 'join':
+        models.ProjectUser.objects.filter(
+            project_id=project_id,
+            user=request.tracer.user,  # ensure the task that I participate
+        ).update(star=True)
+        return redirect('project_list')
+
+    return HttpResponse("Bad request.")

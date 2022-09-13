@@ -11,5 +11,6 @@ urlpatterns = [
     path('image/code/', account.image_code, name='image_code'),
 
     path('project/list/', project.project_list, name='project_list'),
+    path(r'project/star/(?P<project_type>\w+)/(?P<project_id>\d+)/$', project.project_star, name='project_star'),
 
 ]
