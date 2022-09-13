@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 
 from web import models
 from web.forms.bootstrap import BootstrapForm
+from utils import encrypt
 
 from django_redis import get_redis_connection
 
@@ -38,7 +39,7 @@ class RegisterModelForm(BootstrapForm, forms.ModelForm):
                                        },
                                        )
 
-    mobile_phone = forms.CharField(label="mobile_phone",
+    mobile_phone = forms.CharField(label="Mobile Phone",
                                    validators=[RegexValidator(settings.MOBILE_PHONE_VALIDATOR,
                                                               "Please enter a valid phone number."), ])
 
@@ -51,6 +52,53 @@ class RegisterModelForm(BootstrapForm, forms.ModelForm):
         model = models.UserInfo
         fields = ['username', 'email', 'password', 'confirm_password',
                   'mobile_phone', 'code']
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+
+        exists = models.UserInfo.objects.filter(username=username).exists()
+
+        if exists:
+            self.add_error('username', 'Username already exists!')
+
+        return username
+
+    def clean_password(self):
+        pwd = self.cleaned_data['password']
+
+        return encrypt.md5(pwd)
+
+    def clean_confirm_password(self):
+        pwd = self.cleaned_data.get('password')
+
+        cfm_pwd = encrypt.md5(self.cleaned_data['confirm_password'])
+        if pwd != cfm_pwd:
+            raise ValidationError('Passwords do not match.')
+        return cfm_pwd
+
+    def clean_mobile_phone(self):
+        mobile_phone = self.cleaned_data['mobile_phone']
+        exists = models.UserInfo.objects.filter(mobile_phone=mobile_phone).exists()
+        if exists:
+            raise ValidationError('Phone number already exists.')
+        return mobile_phone
+
+    def clean_code(self):
+        code = self.cleaned_data['code']
+        mobile_phone = self.cleaned_data.get('mobile_phone')
+        if not mobile_phone:
+            return code
+        conn = get_redis_connection()
+        redis_code = conn.get(mobile_phone)
+        if not redis_code:
+            raise ValidationError('Verification code is not valid, please try again!')
+
+        redis_str_code = redis_code.decode('utf-8')
+
+        if redis_str_code.strip() != code:
+            raise ValidationError('Verification code is wrong, please try again!')
+
+        return code
 
 
 class SendSmsFormFake(forms.Form):

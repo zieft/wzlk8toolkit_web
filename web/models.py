@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 # Create your models here.
 
 class UserInfo(models.Model):
@@ -12,9 +13,9 @@ class UserInfo(models.Model):
     email = models.CharField(verbose_name="E-mail",
                              max_length=32)
 
-    # verbosename可以在ModelForm里被覆写
+    # verbosename can be rewrite in ModelFomrs
     password = models.CharField(verbose_name="Password",
                                 max_length=32)
 
-    mobile_phone = models.CharField(verbose_name='Mobilphone',
+    mobile_phone = models.CharField(verbose_name='Mobil phone',
                                     max_length=12)

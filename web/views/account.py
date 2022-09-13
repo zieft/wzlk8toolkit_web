@@ -1,14 +1,21 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render
 from django.http import JsonResponse
 from web.forms.account import RegisterModelForm, SendSmsFormFake
-from web.forms.bootstrap import BootstrapForm
 
 from django_redis import get_redis_connection
 
 
 def register(request):
-    form = RegisterModelForm()
-    return render(request, 'register.html', {'form': form})
+    if request.method == 'GET':
+        form = RegisterModelForm()
+        return render(request, 'register.html', {'form': form})
+
+    form = RegisterModelForm(data=request.POST)
+    if form.is_valid():
+        instance = form.save()
+
+        return JsonResponse({'status': True, 'data': '/login/'})
+    return JsonResponse({'status': False, 'error': form.errors})
 
 
 def send_sms_fake(request):
