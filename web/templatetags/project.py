@@ -1,4 +1,5 @@
 from django.template import Library
+from django.urls import reverse
 
 from web import models
 
@@ -19,3 +20,13 @@ def all_project_list(request):  # this is not a view function, so request parame
 
     return {'my': my_project_list, 'join': join_project_list, 'request': request}
     # direct pass return value to the .html file inclusion/all_project_list.html
+
+
+@register.inclusion_tag('inclusion/manager_menu_tag.html')
+def manage_menu_list(request):
+    data_list = [
+        {'title': 'Dashboard', 'url': reverse('dashboard', kwargs={'project_id': request.tracer.project.id})},
+        {'title': 'Docs', 'url': reverse('docs', kwargs={'project_id': request.tracer.project.id})},
+        {'title': 'Setting', 'url': reverse('setting', kwargs={'project_id': request.tracer.project.id})},
+    ]
+    return {'data_list': data_list}
