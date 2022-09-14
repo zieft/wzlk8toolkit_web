@@ -17,5 +17,5 @@ def all_project_list(request):  # this is not a view function, so request parame
     # 2. acquire all tasks I participate
     join_project_list = models.ProjectUser.objects.filter(user=request.tracer.user)
 
-    return {'my': my_project_list, 'join': join_project_list}
+    return {'my': my_project_list, 'join': join_project_list, 'request': request}
     # direct pass return value to the .html file inclusion/all_project_list.html

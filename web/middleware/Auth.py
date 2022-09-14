@@ -37,3 +37,40 @@ class AuthMiddleware(MiddlewareMixin):
         # Check if user is logged in, if not, redirect to 'login' page.
         if not request.tracer.user:
             return redirect('login')
+
+    def process_view(self, request, view, args, kwargs):
+        """
+        Before entering this middleware，make sure url validation is passed.
+        Otherwise, project_id cannot be acquired properly.
+         """
+
+        # 1 if url start with 'manager'
+        if not request.path_info.startswith('/manager'):
+            return  # return 表示验证通过，继续往下走第2步
+
+        # 1.5 acquire project_id and user object
+        project_id = kwargs.get('project_id')
+        user_object = request.tracer.user
+
+        # 2. check if the project is created by me
+        project_object = models.Project.objects.filter(
+            creator=user_object,
+            id=project_id
+        ).first()
+
+        if project_object:  # if created by me
+            request.tracer.project = project_object
+            return
+
+        # 2.5 if not created by me, it could be a task which I participated
+        project_user_object = models.ProjectUser.objects.filter(
+            user=request.tracer.user,
+            project_id=project_id
+        ).first()
+
+        if project_user_object:  # if I participated
+            request.tracer.project = project_user_object.project
+            return
+
+        # 3 None of above conditions satisfied, redirect to 'project_list'
+        return redirect('project_list')
