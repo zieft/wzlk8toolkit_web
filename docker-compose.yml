@@ -1,0 +1,81 @@
+version: "3"
+
+volumes:
+  db_vol:
+  redis_vol:
+  media_vol:
+  static_vol:
+
+networks:
+  nginx_network:
+    driver: bridge
+  db_network:
+    driver: bridge
+  redis_network:
+    driver: bridge
+
+services:
+  redis:
+    image: redis:latest
+    command: redis-server /etc/redis/redis.conf
+    networks:
+      - redis_network
+    volumes:
+      - redis_vol:/data # redis backup
+      - ./compose/redis/redis.conf:/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+    restart: always
+
+  db:
+    image: mysql
+    env_file:
+      - ./wzlk8toolkit_web/.env
+    networks:
+      - db_network
+    volumes:
+      - db_vol:/var/lib/mysql:rw
+      - ./compose/mysql/conf/my.cnf:/etc/mysql/my.cnf
+      - ./compose/mysql/init:/docker-entrypoint-initdb.d/
+    ports:
+      - "3306:3306"
+    restart: always
+
+  web:
+    build: ./wzlk8toolkit_web
+    expose:
+      - "8000"
+    volumes:
+      - ./wzlk8toolkit_web:/var/www/html/wzlk8toolkit_web
+      - static_vol:/var/www/html/wzlk8toolkit_web/static
+      - media_vol:/var/www/html/wzlk8toolkit_web/media
+      - ./compose/uwsgi:/tmp # mount uwsgi log
+    networks:
+      - nginx_network
+      - db_network
+      - redis_network
+    depends_on:
+      - db
+      - redis
+    restart: always
+    tty: true
+    stdin_open: true
+
+  nginx:
+    build: ./compose/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    expose:
+      - "80"
+    volumes:
+      - ./compose/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./compose/nginx/ssl:/usr/share/nginx/ssl
+      - ./compose/nginx/log:/var/log/nginx
+      - static_vol:/usr/share/nginx/html/static
+      - media_vol:/usr/share/nginx/html/media
+    networks:
+      - nginx_network
+    depends_on:
+      - web
+    restart: always

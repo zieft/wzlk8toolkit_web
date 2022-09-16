@@ -80,3 +80,5 @@ fabric.properties
 # IDE generated $ virtualenv
 /.idea/dataSources.xml
 /venv_win/
+/wzlk8toolkit_web/venv_win/
+/wzlk8toolkit_web/wzlk8toolkit_web/local_settings.py
