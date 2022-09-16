@@ -3,4 +3,27 @@
 
 {% block content %}
     <h1>Dashboard</h1>
+    <button id="btnClick" type="button" class="btn btn-danger">describe Pod</button>
+
+{% endblock %}
+{% block js %}
+    <script>
+    $(function () {
+        bindClickBtnClick();
+    })
+
+    function bindClickBtnClick() {
+        $('#btnClick').click(function () {
+            $.ajax({
+                url: "{% url 'describe_pods' project_id=request.tracer.project.id %}",
+                type: "GET",
+                data: {},
+                dataType: 'JSON',
+                success: function (res) {
+                    console.log(res)
+                }
+            })
+        })
+    }
+    </script>
 {% endblock %}
