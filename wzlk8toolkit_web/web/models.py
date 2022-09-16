@@ -42,8 +42,11 @@ class Project(models.Model):
     creator = models.ForeignKey(verbose_name='Creator', to='UserInfo', on_delete=models.CASCADE)
     create_datetime = models.DateTimeField(verbose_name='Create Datetime', auto_now_add=True)
 
-    bucket = models.CharField(verbose_name="Bucket Name for S3", max_length=64, blank=True, null=True)
-    S3_key = models.CharField(verbose_name='S3 Key', max_length=64, blank=True, null=True)
+    name_space = models.CharField(verbose_name='Namespace', max_length=32, default='ggr')
+    bucket = models.CharField(verbose_name="Bucket Name for S3", max_length=64, blank=True, null=True,
+                              default='ggr-bucket-cbf77f1e-eea2-4b4a-88b2-ae787daf3f42')
+    S3_key = models.CharField(verbose_name='S3 Key', max_length=64, blank=True, null=True,
+                              default='4G8F4PBHBLNX7ZOW8N5P')
     S3_secret_key = models.CharField(verbose_name='S3 Secret Key', max_length=64, blank=True, null=True)
 
 

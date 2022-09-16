@@ -18,7 +18,7 @@ class ProjectModelForm(BootstrapForm, forms.ModelForm):
 
     class Meta:
         model = models.Project
-        fields = ['name', 'color', 'bucket', 'S3_key', 'S3_secret_key', 'desc']
+        fields = ['name', 'color', 'name_space', 'bucket', 'S3_key', 'S3_secret_key', 'desc']
 
         widgets = {
             'desc': forms.Textarea(attrs={'xx': 123}),
