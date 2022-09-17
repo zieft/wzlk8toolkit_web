@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 
-from web.views import account, home, project, manager
+from web.views import account, home, project, manager, kubectl
 
 urlpatterns = [
     path('index/', home.index, name='index'),
@@ -17,9 +17,11 @@ urlpatterns = [
             name='project_unstar'),
 
     re_path(r'^manager/(?P<project_id>\d+)/dashboard/$', manager.dashboard, name='dashboard'),
-    re_path(r'^manager/(?P<project_id>\d+)/dashboard/describepods/$', manager.describe_pods, name='describe_pods'),
+    re_path(r'^manager/(?P<project_id>\d+)/dashboard/describe/pods/$', kubectl.describe_pods, name='describe_pods'),
+    re_path(r'^manager/(?P<project_id>\d+)/dashboard/apply/$', kubectl.kubectl_apply, name='kubectl_apply'),
 
     re_path(r'^manager/(?P<project_id>\d+)/setting/$', manager.setting, name='setting'),
+
     re_path(r'^manager/(?P<project_id>\d+)/docs/$', manager.docs, name='docs'),
 
 ]

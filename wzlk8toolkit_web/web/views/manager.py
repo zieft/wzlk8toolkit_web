@@ -1,17 +1,11 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import render, redirect
 
-from utils.kubectl.describe import KubectlDescribe
+from utils.yamlgenerator import YamlGenerator
+from web.forms.manager import SettingYamlForm
 
 
 def dashboard(request, project_id):
     return render(request, 'dashboard.html')
-
-
-def describe_pods(request, project_id):
-    describe = KubectlDescribe(request)
-    describe.pods()
-    return JsonResponse({'stdout': describe.stdout})
 
 
 def docs(request, project_id):
@@ -19,5 +13,19 @@ def docs(request, project_id):
 
 
 def setting(request, project_id):
-    return render(request, 'setting.html')
+    if request.method == "GET":
+        form = SettingYamlForm()
+        return render(request, 'setting.html', {'form': form})
 
+    fields = {}
+    QueryDict = request.POST
+    for key in QueryDict.keys():
+        fields[key] = QueryDict.get(key)
+
+
+    form = SettingYamlForm(request, request.POST)
+
+    generator = YamlGenerator(request)
+    generator.handle(**fields)
+
+    return redirect('project_list')

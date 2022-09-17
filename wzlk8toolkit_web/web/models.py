@@ -48,6 +48,7 @@ class Project(models.Model):
     S3_key = models.CharField(verbose_name='S3 Key', max_length=64, blank=True, null=True,
                               default='4G8F4PBHBLNX7ZOW8N5P')
     S3_secret_key = models.CharField(verbose_name='S3 Secret Key', max_length=64, blank=True, null=True)
+    yaml = models.CharField(verbose_name='Yaml File Path', max_length=64, blank=True, null=True)
 
 
 class ProjectUser(models.Model):
