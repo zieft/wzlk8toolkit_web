@@ -37,3 +37,23 @@ class KubelctlExecutor:
         self.command.extend(self.args)
 
         print(self.command)
+
+
+class KubectlDescribe(KubelctlExecutor):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.primary_com = ['kubectl', 'describe']
+
+    def pods(self):
+        self.args = ['pods']
+        self.generate_command()
+        self.excutecommand()
+
+
+class KubectlApply(KubelctlExecutor):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.primary_com = ['kubectl', 'apply']
+
+    def file(self):
+        pass
