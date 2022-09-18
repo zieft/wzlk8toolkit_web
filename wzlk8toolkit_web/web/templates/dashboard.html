@@ -2,7 +2,6 @@
 
 
 {% block content %}
-
     <div class="container">
         <h2>Dashboard</h2>
         <div class="panel panel-primary">
@@ -29,7 +28,7 @@
                             </dd>
                             <dd></dd>
                             <dt>Status</dt>
-                            <dd></dd>
+                            <dd id="CPStatus"></dd>
                             <dt></dt>
                             <dd>
                             </dd>
@@ -38,7 +37,7 @@
                 </div>
                 <button id="btnContainerCreation" type="button" class="btn btn-primary">Create k8mars Job</button>
             </div>
-        </div>
+        </div>  <!--Container Preparation-->
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Image Acquisition</h3>
@@ -80,8 +79,6 @@
             </div>
         </div>
     </div>
-
-
 {% endblock %}
 
 {% block js %}
@@ -91,14 +88,16 @@
         })
 
         function bindClickBtnClick() {
-            $('#btnClick').click(function () {
+            $('#btnContainerCreation').click(function () {
+                $('#CPStatus').empty()
                 $.ajax({
-                    url: "{% url 'describe_pods' project_id=request.tracer.project.id %}",
+                    url: "{% url 'apply_file' project_id=request.tracer.project.id %}",
                     type: "GET",
                     data: {},
                     dataType: 'JSON',
                     success: function (res) {
-                        console.log(res)
+                        console.log(res);
+                        $('#CPStatus').text(res.status);
                     }
                 })
             })

@@ -56,4 +56,7 @@ class KubectlApply(KubelctlExecutor):
         self.primary_com = ['kubectl', 'apply']
 
     def file(self):
-        pass
+        # check file existence again.
+        self.args = ['-f', self.request.tracer.project.yaml]
+        self.generate_command()
+        self.excutecommand()

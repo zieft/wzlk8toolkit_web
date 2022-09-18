@@ -17,8 +17,8 @@ urlpatterns = [
             name='project_unstar'),
 
     re_path(r'^manager/(?P<project_id>\d+)/dashboard/$', manager.dashboard, name='dashboard'),
-    re_path(r'^manager/(?P<project_id>\d+)/dashboard/describe/pods/$', kubectl.describe_pods, name='describe_pods'),
-    re_path(r'^manager/(?P<project_id>\d+)/dashboard/apply/$', kubectl.kubectl_apply, name='kubectl_apply'),
+    re_path(r'^manager/(?P<project_id>\d+)/dashboard/kubectl/apply_file/$', kubectl.kubectl_apply_file, name='apply_file'),
+    re_path(r'^manager/(?P<project_id>\d+)/dashboard/apply/$', kubectl.kubectl_apply_file, name='kubectl_apply'),
 
     re_path(r'^manager/(?P<project_id>\d+)/setting/$', manager.setting, name='setting'),
 
