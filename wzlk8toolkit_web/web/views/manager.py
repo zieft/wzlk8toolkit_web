@@ -23,7 +23,7 @@ def setting(request, project_id):
         fields[key] = QueryDict.get(key)
 
 
-    form = SettingYamlForm(request, request.POST)
+    # form = SettingYamlForm(request, request.POST)
 
     generator = YamlGenerator(request)
     generator.handle(**fields)

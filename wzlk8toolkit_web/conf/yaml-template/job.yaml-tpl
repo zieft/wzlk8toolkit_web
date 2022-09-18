@@ -54,7 +54,7 @@ spec:
           persistentVolumeClaim:
             claimName: pvc-send-{{ task_name }}
       containers:
-      - name: wzlk8toolkit-for-task-{{ task_name }}
+      - name: {{ task_name }}-wzlk8toolkit
         image: {{ image_name }}
         command: ['sh', '-c', 'echo The app is running! &&
         MINIO_ROOT_USER=admin MINIO_ROOT_PASSWORD=password minio server /storage --console-address ":9001" &&

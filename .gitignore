@@ -84,3 +84,4 @@ fabric.properties
 /wzlk8toolkit_web/wzlk8toolkit_web/local_settings.py
 /wzlk8toolkit_web/venv/
 /wzlk8toolkit_web/temp/
+/wzlk8toolkit_web/web/migrations/0001_initial.py

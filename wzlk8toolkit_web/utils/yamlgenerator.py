@@ -2,6 +2,7 @@ import os
 
 from django.template import Context, Engine
 
+import wzlk8toolkit_web
 from web import models
 
 
@@ -21,7 +22,7 @@ class YamlGenerator:
         context = Context({
             **fields,
             'task_name': self.project.name,
-            'wzlk8toolkit_web_version': 'v0.1',
+            'wzlk8toolkit_web_version': wzlk8toolkit_web.__version__,
             'name_space': self.project.name_space,
         }, autoescape=False)
 
