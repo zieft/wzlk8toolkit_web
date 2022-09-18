@@ -2,28 +2,106 @@
 
 
 {% block content %}
-    <h1>Dashboard</h1>
-    <button id="btnClick" type="button" class="btn btn-danger">describe Pod</button>
+
+    <div class="container">
+        <h2>Dashboard</h2>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Container Preparation</h3>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <div class="bs-example" data-example-id="horizontal-dl">
+                        <dl class="dl-horizontal">
+                            <dt>Description</dt>
+                            <dd>Creat a Job in k8mars cluster based on the wzlk8toolkit generated yaml file.</dd>
+                            <dt>Yaml File</dt>
+                            <dd>{% if request.tracer.project.yaml %}
+                                {{ request.tracer.project.yaml }}
+                                <span class="glyphicon glyphicon-ok" style="color: greenyellow"></span>
+                            {% else %}
+                                Yaml file not found. Please use
+                                <a href="{% url 'setting' project_id=request.tracer.project.id %}">Setting panel</a>
+                                to create one.
+                                <span class="glyphicon glyphicon-remove" style="color: red"></span>
+                            {% endif %}
+
+                            </dd>
+                            <dd></dd>
+                            <dt>Status</dt>
+                            <dd></dd>
+                            <dt></dt>
+                            <dd>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <button id="btnContainerCreation" type="button" class="btn btn-primary">Create k8mars Job</button>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Image Acquisition</h3>
+            </div>
+            <div class="panel-body">
+                Not implemented yet
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Photogrammetry</h3>
+            </div>
+            <div class="panel-body">
+                Not implemented yet
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Mesh postprocessing</h3>
+            </div>
+            <div class="panel-body">
+                Not implemented yet
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Crack Detection</h3>
+            </div>
+            <div class="panel-body">
+                Not implemented yet
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Coordinate Transformation</h3>
+            </div>
+            <div class="panel-body">
+                Not implemented yet
+            </div>
+        </div>
+    </div>
+
 
 {% endblock %}
+
 {% block js %}
     <script>
-    $(function () {
-        bindClickBtnClick();
-    })
-
-    function bindClickBtnClick() {
-        $('#btnClick').click(function () {
-            $.ajax({
-                url: "{% url 'describe_pods' project_id=request.tracer.project.id %}",
-                type: "GET",
-                data: {},
-                dataType: 'JSON',
-                success: function (res) {
-                    console.log(res)
-                }
-            })
+        $(function () {
+            bindClickBtnClick();
         })
-    }
+
+        function bindClickBtnClick() {
+            $('#btnClick').click(function () {
+                $.ajax({
+                    url: "{% url 'describe_pods' project_id=request.tracer.project.id %}",
+                    type: "GET",
+                    data: {},
+                    dataType: 'JSON',
+                    success: function (res) {
+                        console.log(res)
+                    }
+                })
+            })
+        }
     </script>
 {% endblock %}
