@@ -55,7 +55,7 @@ spec:
             claimName: pvc-send-{{ task_name }}
       containers:
       - name: wzlk8toolkit-for-task-{{ task_name }}
-        image: {{ image_name }}# zieft/wzlk8toolkit:v0.3
+        image: {{ image_name }}
         command: ['sh', '-c', 'echo The app is running! &&
         MINIO_ROOT_USER=admin MINIO_ROOT_PASSWORD=password minio server /storage --console-address ":9001" &&
         mkdir /storage/receive &&
@@ -70,8 +70,8 @@ spec:
             cpu: "{{ cpu_power }}000m"
             memory: "{{ memory }}Gi"
           limits:
-            cpu: "16000m"
-            memory: "64Gi"
+            cpu: "{{ cpu_power }}000m"
+            memory: "{{ memory }}Gi"
         volumeMounts:
         - name: storage
           mountPath: "/storage"
@@ -83,7 +83,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: minio-service
+  name: minio-service-{{ task_name }}
   namespace: ggr
 spec:
   type: NodePort

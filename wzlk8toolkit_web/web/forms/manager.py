@@ -7,7 +7,7 @@ class SettingYamlForm(BootstrapForm, forms.Form):
                                            initial=100)
     pvc_space_send = forms.IntegerField(label='Space for "Send" (50-150)', max_value=150, min_value=50,
                                         initial=150)
-    image_name = forms.CharField(label='Backend Image', initial='zieft/wzl_k8toolkit:latest')
+    image_name = forms.CharField(label='Backend Image', initial='zieft/wzlk8toolkit:v0.3')
     container_port = forms.IntegerField(label='Container Port (19000-19999)', max_value=19999, min_value=19000,
                                         initial=19001)
     cpu_power = forms.IntegerField(label='CPU in cores (1-16)', max_value=16, min_value=1, initial=4)
