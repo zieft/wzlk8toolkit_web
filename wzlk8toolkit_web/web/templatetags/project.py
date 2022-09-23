@@ -29,4 +29,12 @@ def manage_menu_list(request):
         {'title': 'Docs', 'url': reverse('docs', kwargs={'project_id': request.tracer.project.id})},
         {'title': 'Setting', 'url': reverse('setting', kwargs={'project_id': request.tracer.project.id})},
     ]
+
+    for item in data_list:
+        # compare item['url'] and the url from user request：request.path_info
+        # if matches
+        # add a active class to the tag
+        if request.path_info.startswith(item['url']):
+            item['class'] = 'active'
+
     return {'data_list': data_list}
